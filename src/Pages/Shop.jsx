@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useCart } from "../context/CartContext";
+import AddButton from "../components/AddButton";
+
 gsap.registerPlugin(ScrollTrigger);
 
 const inr = (n) => `\u20b9${n.toLocaleString("en-IN")}`;
@@ -15,24 +16,114 @@ const CATEGORIES = ["All", "Running", "Casual", "Trail", "Court"];
 // Every shoe in the store. hue tints the photo so 4 images make 12 colourways.
 // Use real photos per item: change img, set hue: 0.
 const PRODUCTS = [
-  { id: "runner-air", name: "Runner Air", cat: "Running", price: 4999, img: "/shoe1.png", hue: 0, tag: "New" },
-  { id: "street-low", name: "Street Low", cat: "Casual", price: 3799, img: "/shoe2.png", hue: 0 },
-  { id: "trail-pro", name: "Trail Pro", cat: "Trail", price: 5499, img: "/shoe3.png", hue: 0, tag: "Bestseller" },
-  { id: "court-classic", name: "Court Classic", cat: "Court", price: 3299, old: 3999, img: "/shoe4.png", hue: 0, tag: "Sale" },
-  { id: "runner-air-sunset", name: "Runner Air Sunset", cat: "Running", price: 5299, img: "/shoe1.png", hue: 160 },
-  { id: "runner-air-volt", name: "Runner Air Volt", cat: "Running", price: 5199, img: "/shoe1.png", hue: 60 },
-  { id: "street-low-mint", name: "Street Low Mint", cat: "Casual", price: 3999, img: "/shoe2.png", hue: 90, tag: "New" },
-  { id: "street-low-dusk", name: "Street Low Dusk", cat: "Casual", price: 3899, img: "/shoe2.png", hue: 250 },
-  { id: "trail-pro-clay", name: "Trail Pro Clay", cat: "Trail", price: 5699, img: "/shoe3.png", hue: 300 },
-  { id: "trail-pro-moss", name: "Trail Pro Moss", cat: "Trail", price: 5599, img: "/shoe3.png", hue: 120 },
-  { id: "court-classic-noir", name: "Court Classic Noir", cat: "Court", price: 3499, img: "/shoe4.png", hue: 200 },
-  { id: "court-classic-coral", name: "Court Classic Coral", cat: "Court", price: 3399, old: 3799, img: "/shoe4.png", hue: 330, tag: "Sale" },
+  {
+    id: "runner-air",
+    name: "Runner Air",
+    cat: "Running",
+    price: 4999,
+    img: "/shoe1.png",
+    hue: 0,
+    tag: "New",
+  },
+  {
+    id: "street-low",
+    name: "Street Low",
+    cat: "Casual",
+    price: 3799,
+    img: "/shoe2.png",
+    hue: 0,
+  },
+  {
+    id: "trail-pro",
+    name: "Trail Pro",
+    cat: "Trail",
+    price: 5499,
+    img: "/shoe3.png",
+    hue: 0,
+    tag: "Bestseller",
+  },
+  {
+    id: "court-classic",
+    name: "Court Classic",
+    cat: "Court",
+    price: 3299,
+    old: 3999,
+    img: "/shoe4.png",
+    hue: 0,
+    tag: "Sale",
+  },
+  {
+    id: "runner-air-sunset",
+    name: "Runner Air Sunset",
+    cat: "Running",
+    price: 5299,
+    img: "/shoe1.png",
+    hue: 160,
+  },
+  {
+    id: "runner-air-volt",
+    name: "Runner Air Volt",
+    cat: "Running",
+    price: 5199,
+    img: "/shoe1.png",
+    hue: 60,
+  },
+  {
+    id: "street-low-mint",
+    name: "Street Low Mint",
+    cat: "Casual",
+    price: 3999,
+    img: "/shoe2.png",
+    hue: 90,
+    tag: "New",
+  },
+  {
+    id: "street-low-dusk",
+    name: "Street Low Dusk",
+    cat: "Casual",
+    price: 3899,
+    img: "/shoe2.png",
+    hue: 250,
+  },
+  {
+    id: "trail-pro-clay",
+    name: "Trail Pro Clay",
+    cat: "Trail",
+    price: 5699,
+    img: "/shoe3.png",
+    hue: 300,
+  },
+  {
+    id: "trail-pro-moss",
+    name: "Trail Pro Moss",
+    cat: "Trail",
+    price: 5599,
+    img: "/shoe3.png",
+    hue: 120,
+  },
+  {
+    id: "court-classic-noir",
+    name: "Court Classic Noir",
+    cat: "Court",
+    price: 3499,
+    img: "/shoe4.png",
+    hue: 200,
+  },
+  {
+    id: "court-classic-coral",
+    name: "Court Classic Coral",
+    cat: "Court",
+    price: 3399,
+    old: 3799,
+    img: "/shoe4.png",
+    hue: 330,
+    tag: "Sale",
+  },
 ];
 
 function Shop() {
   // filter lives in the URL: /shop?cat=Running (footer links use this too)
   const [params, setParams] = useSearchParams();
-  const { addToCart } = useCart();
   const cat = params.get("cat");
   const filter = CATEGORIES.includes(cat) ? cat : "All";
 
@@ -50,11 +141,27 @@ function Shop() {
     const ctx = gsap.context(() => {
       gsap
         .timeline()
-        .from(".shop-word", { yPercent: 115, duration: 0.9, stagger: 0.12, ease: "power4.out" })
-        .from(".shop-meta", { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" }, "-=0.5")
+        .from(".shop-word", {
+          yPercent: 115,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: "power4.out",
+        })
+        .from(
+          ".shop-meta",
+          { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" },
+          "-=0.5",
+        )
         .from(
           ".shop-chip",
-          { opacity: 0, y: 20, duration: 0.5, stagger: 0.07, ease: "power3.out", clearProps: "transform,opacity" },
+          {
+            opacity: 0,
+            y: 20,
+            duration: 0.5,
+            stagger: 0.07,
+            ease: "power3.out",
+            clearProps: "transform,opacity",
+          },
           "-=0.4",
         );
 
@@ -95,13 +202,22 @@ function Shop() {
     gsap.fromTo(
       els,
       { opacity: 0, y: 30, scale: 0.96 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.07, ease: "power3.out", clearProps: "opacity,transform" },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.6,
+        stagger: 0.07,
+        ease: "power3.out",
+        clearProps: "opacity,transform",
+      },
     );
   }, [filter]);
 
   const pick = (c) => {
     if (c === filter) return;
-    const go = () => setParams(c === "All" ? {} : { cat: c }, { replace: true });
+    const go = () =>
+      setParams(c === "All" ? {} : { cat: c }, { replace: true });
     if (reduced()) return go();
     gsap.to(q(".shop-card"), {
       opacity: 0,
@@ -124,7 +240,9 @@ function Shop() {
               to="/"
               className="group inline-flex items-center gap-2 rounded-full border border-white/40 px-4 py-2 text-sm font-bold transition-colors hover:bg-white hover:text-[#15181a]"
             >
-              <span className="transition-transform duration-300 group-hover:-translate-x-1">←</span>
+              <span className="transition-transform duration-300 group-hover:-translate-x-1">
+                ←
+              </span>
               Home
             </Link>
 
@@ -138,7 +256,8 @@ function Shop() {
                 ))}
               </h1>
               <p className="shop-meta text-lg text-white/60 sm:text-xl md:pb-3">
-                {visible.length} {visible.length === 1 ? "style" : "styles"} · Free shipping above {inr(999)}
+                {visible.length} {visible.length === 1 ? "style" : "styles"} ·
+                Free shipping above {inr(999)}
               </p>
             </div>
 
@@ -192,27 +311,31 @@ function Shop() {
                         {p.tag}
                       </span>
                     )}
-                    <motion.button
-                      type="button"
-                      whileHover={{ rotate: 90, scale: 1.08 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={() => addToCart({ id: p.id, name: p.name, price: p.price, image: p.img })}
-                      aria-label={`Add ${p.name} to cart`}
+                    <AddButton
+                      product={{
+                        id: p.id,
+                        name: p.name,
+                        price: p.price,
+                        image: p.img,
+                      }}
+                      variant="round"
                       className="absolute bottom-2 right-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#15181a] text-white transition-transform duration-300 sm:bottom-3 sm:right-3 sm:h-11 sm:w-11"
-                    >
-                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <path d="M12 5v14M5 12h14" />
-                      </svg>
-                    </motion.button>
+                    />
                   </div>
                   <div className="mt-3 flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="text-base font-bold leading-tight sm:text-lg">{p.name}</h3>
+                      <h3 className="text-base font-bold leading-tight sm:text-lg">
+                        {p.name}
+                      </h3>
                       <p className="text-sm text-[#15181a]/55">{p.cat}</p>
                     </div>
                     <p className="whitespace-nowrap text-right text-sm sm:text-base">
                       <span className="font-bold">{inr(p.price)}</span>
-                      {p.old && <span className="block text-[#15181a]/40 line-through">{inr(p.old)}</span>}
+                      {p.old && (
+                        <span className="block text-[#15181a]/40 line-through">
+                          {inr(p.old)}
+                        </span>
+                      )}
                     </p>
                   </div>
                 </article>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { motion } from "framer-motion";
 import { useCart } from "../context/CartContext"; // <- change path if yours differs
 import flyToCart from "./flyToCart";
 
@@ -7,9 +7,11 @@ const slug = (s) => s.toLowerCase().replace(/\s+/g, "-");
 const reduced = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// Add-to-cart button. Click: button pops and shows a check, shoe flies to the
-// navbar cart, item is added when it lands.
-// variant "round" = + icon (product cards), "pill" = text button (slider).
+// Add-to-cart button. Click: pops + shows a check, shoe flies to the navbar cart,
+// item is added when it lands.
+//   variant "round" = + icon (product cards), "pill" = text button (slider)
+// Do NOT put CSS `transition-transform` / `hover:rotate-*` / `hover:scale-*` in className:
+// framer-motion drives the transform and CSS would fight it.
 function AddButton({ product, variant = "round", className = "" }) {
   const { addToCart } = useCart();
   const [added, setAdded] = useState(false);
@@ -19,28 +21,41 @@ function AddButton({ product, variant = "round", className = "" }) {
   useEffect(() => () => clearTimeout(timer.current), []);
 
   const add = () => {
-    const item = { ...product, id: product.id ?? slug(product.name) };
+    // callers may pass the photo as `img` or `image`. Store both so the fly animation,
+    // navbar drawer and cart page all find it.
+    const photo = product.img ?? product.image;
+    const item = {
+      ...product,
+      id: product.id ?? slug(product.name),
+      img: photo,
+      image: photo,
+    };
 
     setAdded(true);
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setAdded(false), 1400);
 
-    if (!reduced()) {
-      gsap.fromTo(
-        ref.current,
-        { scale: 0.85 },
-        { scale: 1, duration: 0.6, ease: "back.out(3)", clearProps: "transform" },
-      );
-    }
-
+    // flyToCart adds the item instantly when motion is reduced or no cart icon is visible
     flyToCart(ref.current, item, () => addToCart(item));
   };
 
+  const motionOn = !reduced();
+
   return (
-    <button
+    <motion.button
       ref={ref}
       type="button"
       onClick={add}
+      animate={added && motionOn ? { scale: [0.85, 1] } : { scale: 1 }}
+      transition={{ type: "spring", stiffness: 500, damping: 14 }}
+      whileHover={
+        motionOn
+          ? variant === "round"
+            ? { rotate: 90, scale: 1.08 }
+            : { scale: 1.04 }
+          : undefined
+      }
+      whileTap={motionOn ? { scale: 0.9 } : undefined}
       aria-label={`Add ${product.name} to cart`}
       className={className}
     >
@@ -90,7 +105,7 @@ function AddButton({ product, variant = "round", className = "" }) {
           </span>
         </span>
       )}
-    </button>
+    </motion.button>
   );
 }
 

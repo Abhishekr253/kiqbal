@@ -34,7 +34,7 @@ export default function flyToCart(fromEl, product, onLand) {
     height: `${SIZE}px`,
   });
   const img = new Image();
-  img.src = product.img;
+  img.src = product.img ?? product.image ?? "";
   img.alt = "";
   img.className = "h-full w-full object-contain p-1.5";
   img.style.filter = `hue-rotate(${product.hue ?? 0}deg)`;

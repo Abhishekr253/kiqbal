@@ -2,7 +2,6 @@ import React, { useLayoutEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import AddButton from "./AddButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -125,12 +124,6 @@ useLayoutEffect(() => {
               →
             </span>
           </Link>
-
-          <AddButton
-            product={SHOP_ALL_PRODUCT}
-            variant="round"
-            className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/40 bg-white text-[#15181a] shadow-lg transition-all duration-300 hover:scale-105 hover:bg-[#15181a] hover:text-white"
-          />
         </div>
       </div>
     </section>
