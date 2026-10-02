@@ -13,6 +13,9 @@ function SmoothScroll({ children }) {
       syncTouch: true,
     });
 
+    // expose so ScrollToTop (App.jsx) can reset Lenis internal position
+    window.lenis = lenis;
+
     lenis.on("scroll", ScrollTrigger.update);
 
     const update = (time) => {
@@ -26,6 +29,7 @@ function SmoothScroll({ children }) {
     return () => {
       gsap.ticker.remove(update);
       lenis.destroy();
+      if (window.lenis === lenis) delete window.lenis;
     };
   }, []);
 

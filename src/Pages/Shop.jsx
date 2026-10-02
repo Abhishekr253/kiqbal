@@ -135,7 +135,6 @@ function Shop() {
 
   // 1) Mount only: heading + chips entrance, card wipe reveal
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
     if (reduced()) return;
 
     const ctx = gsap.context(() => {
