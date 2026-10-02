@@ -103,20 +103,20 @@ function ShoeCollection() {
 
       // Big outline word slides sideways while section scrolls past
       gsap.fromTo(
-        ".shoe-bg",
-        { xPercent: 12 },
-        {
-          xPercent: -12,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-            refreshPriority: -1,
-          },
-        },
-      );
+  ".shoe-bg",
+  { xPercent: 4 },
+  {
+    xPercent: -4,
+    ease: "none",
+    scrollTrigger: {
+      trigger: sectionRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: true,
+      refreshPriority: -1,
+    },
+  },
+);
     }, sectionRef);
 
     // keep card gaps right when window resizes / phone rotates
@@ -173,12 +173,29 @@ function ShoeCollection() {
 
       {/* Background outline word */}
       <span
-        aria-hidden="true"
-        className="shoe-bg pointer-events-none absolute left-0 top-[16%] select-none whitespace-nowrap text-[30vw] font-black leading-none text-transparent lg:text-[22vw]"
-        style={{ WebkitTextStroke: "1px rgba(255,255,255,0.12)" }}
-      >
-        SNEAKERS
-      </span>
+  aria-hidden="true"
+  className="
+    shoe-bg
+    pointer-events-none
+    absolute
+    left-1/2
+    top-[16%]
+    w-full
+    -translate-x-1/2
+    select-none
+    whitespace-nowrap
+    text-center
+    text-[clamp(6rem,30vw,20rem)]
+    font-black
+    leading-none
+    text-transparent
+  "
+  style={{
+    WebkitTextStroke: "1px rgba(255,255,255,0.12)",
+  }}
+>
+  Boots
+</span>
 
       <h2 className="relative flex flex-wrap justify-center gap-x-[0.3em] text-center text-4xl font-black leading-[1.05] tracking-tight sm:text-6xl lg:text-8xl">
         {["Shoe", "Collection"].map((w) => (

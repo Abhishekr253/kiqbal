@@ -147,7 +147,7 @@ function About() {
         <section className="about-img-wrap relative h-[50vh] overflow-hidden bg-[#15181a] sm:h-[65vh]">
           <div
             className="about-img absolute inset-x-0 -top-[15%] h-[130%] bg-cover bg-center"
-            style={{ backgroundImage: "url('https://i.pinimg.com/1200x/37/06/5c/37065cbdd98934a1db08b1c6ac8a04f8.jpg')" }}
+            style={{ backgroundImage: "url('/about.png')" }}
           />
           <div className="absolute inset-0 bg-black/40" />
         </section>

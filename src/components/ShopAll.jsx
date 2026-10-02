@@ -89,12 +89,11 @@ useLayoutEffect(() => {
     >
       {/* Background Image */}
       <div
-        className="shop-bg absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://i.pinimg.com/1200x/a4/c4/87/a4c487d6b51cb9c1a634c9345c0cae2a.jpg')",
-        }}
-      />
+  className="shop-bg absolute inset-0 bg-cover bg-center"
+  style={{
+    backgroundImage: "url('/shop.png')",
+  }}
+/>
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50" />
